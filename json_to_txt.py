@@ -14,18 +14,17 @@ class_num_dict = {n: i for i, r in enumerate((range(49, 81), range(177, 185), ra
 labels_path = "./ultralytics/cfg/fitness/valid/labels"
 os.makedirs(labels_path, exist_ok=True)
 
-# root_path = "C:/Users/labadmin/Downloads/fitness/train/labels"
+# root_path = "C:/Users/labadmin/Downloads/fitness/train/labels/138_12_1"
 # jsons_list = glob.glob(os.path.join(root_path, "*", "*.json"))
 root_path = "C:/Users/labadmin/Downloads/fitness/valid/labels"
 jsons_list = glob.glob(os.path.join(root_path, "*", "*.json"))
 
 for json_src in tqdm(jsons_list):
-    json_file = json_src.split("\\")[-1]
-    if json_file.split('.')[0][-2:] == '3d':
+    json_name = json_src.split("\\")[-1]
+    if json_name.split('.')[0][-2:] == '3d':
         continue
 
-    json_file = os.path.join(root_path, json_file)
-    with open(json_file, 'r', encoding='utf-8') as f:
+    with open(json_src, 'r', encoding='utf-8') as f:
         annotations = json.load(f)
 
     frames = annotations['frames']
