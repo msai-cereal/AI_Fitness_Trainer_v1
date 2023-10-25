@@ -1,0 +1,16 @@
+train: ../fitness/train/images/
+val: ../fitness/valid/images/
+
+# Keypoints
+kpt_shape: [24, 3]  # number of keypoints, number of dims (2 for x,y or 3 for x,y,visible)
+flip_idx: [0, 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15, 17, 19, 18, 20, 21, 23, 22]
+
+# Classes 'burpees', 'cross_lunge', "barbell_squat', 'side_lateral_raise', 'push_up', 'pull_up'
+names:
+#  0: person
+  0 : burpees
+  1 : cross_lunge
+  2 : barbell_squat
+  3 : side_lateral_raise
+  4 : push_up
+  5 : pull_up
