@@ -1,7 +1,10 @@
 import os
 import glob
 import cv2
+import torch
+import random
 import numpy as np
+import albumentations as A
 from ultralytics import YOLO
 
 pose_palette = np.array([[255, 128, 0], [255, 153, 51], [255, 178, 102], [230, 230, 0], [255, 153, 255],
@@ -17,17 +20,34 @@ limb_color = pose_palette[[9, 9, 9, 9, 9, 9, 7, 7, 7, 7,
 kpt_color = pose_palette[[16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0,
                           9, 9, 9, 9, 9, 9, 7, 0, 0, 7, 7, 9, 9]]
 
-model = YOLO("./runs/pose/train3/weights/best.pt")
+model = YOLO("./runs/pose/train13/weights/best.pt")
 
-# root_path = "./ultralytics/cfg/fitness/train/images"
+root_path = "./ultralytics/cfg/fitness/valid/images"
 # image_path_list = glob.glob(os.path.join(root_path, '*jpg'))
+
 # root_path = "C:/Users/labadmin/Downloads/frame_ex/test0000_1078"
 # image_path_list = glob.glob(os.path.join(root_path, '*png'))
-root_path = "C:/Users/labadmin/Downloads/frame_ex/img"
-image_path_list = glob.glob(os.path.join(root_path, '*png'))
+# root_path = "C:/Users/labadmin/Downloads/frame_ex/img"
+# image_path_list += glob.glob(os.path.join(root_path, '*png'))
+
+# root_path = "C:/Users/labadmin/Downloads/20231026"
+# image_path_list = glob.glob(os.path.join(root_path, "*", "*", "*.png"))
+
+# root_path = "C:/Users/labadmin/Downloads/crop"
+image_path_list = glob.glob(os.path.join(root_path, '*jpg'))
+
+random.shuffle(image_path_list)
+# print(image_path_list)
+# exit()
+
+# li = list(map(str, range(713, 729)))
 
 for image_path in image_path_list:
-    result = model.predict(image_path, save=False, imgsz=640, conf=0.5, device='cuda')[0]
+    # num = image_path.split("\\")[-1].split("-")[0]
+    # if num not in li:
+    #     continue
+    with torch.no_grad():
+        result = model.predict(image_path, save=False, imgsz=640, conf=0.5, device='cuda')[0]
 
     image_path = result.path
     boxes = result.boxes.xyxy
@@ -76,11 +96,14 @@ for image_path in image_path_list:
             x2, y2 = int(kps[t][0] * scale_factor_x), int(kps[t][1] * scale_factor_y)
             cv2.line(image, (x1, y1), (x2, y2), limb_color[j].tolist(), 2)
         except IndexError as e:
-            continue
+            print(image_path, j)
+
+    image = cv2.resize(image, (640, 640))
+    transform = A.Compose([A.augmentations.crops.transforms.CenterCrop(600, 360, always_apply=False, p=1.0)])
+    image = transform(image=image)['image']
 
     # cv2.imwrite("./test.jpg", image)
     cv2.imshow("Test", image)
-    cv2.waitKey(0)
     k = cv2.waitKey(0)
     if k == ord('q'):
         break
@@ -92,13 +115,18 @@ for image_path in image_path_list:
 
 # model = YOLO("./runs/pose/train2/weights/best.pt")
 
-# # results = model.predict(
-# #     "./ultralytics/cfg/fitness/test/images/파일이름.jpg",
-# #     save=False, imgsz=640, conf=0.5, device='cuda'
-# # )
+# results = model.predict(
+#     "./ultralytics/cfg/fitness/test/images/파일이름.jpg",
+#     save=False, imgsz=640, conf=0.5, device='cuda'
+# )
 
 # results = model.predict(
 #     "./ultralytics/cfg/fitness/train/images/001-1-1-01-Z17_B-0000011.jpg",
+#     save=False, imgsz=640, conf=0.5, device='cuda'
+# )
+
+# results = model.predict(
+#     "bus.jpg",
 #     save=False, imgsz=640, conf=0.5, device='cuda'
 # )
 

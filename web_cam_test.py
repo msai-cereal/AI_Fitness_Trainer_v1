@@ -1,4 +1,5 @@
 import cv2
+import torch
 import numpy as np
 from ultralytics import YOLO
 
@@ -16,10 +17,12 @@ kpt_color = pose_palette[[16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0,
                           9, 9, 9, 9, 9, 9, 7, 0, 0, 7, 7, 9, 9]]
 
 # Load YOLO model
-model = YOLO("C:/Users/kwest/Downloads/yolo8_ai_hub/yolo8_ai_hub/runs/pose/train3/weights/best.pt")
+model = YOLO("./runs/pose/train5/weights/best.pt")
+# model = YOLO("./runs/pose/train4/weights/best.pt")
 
 # Open the webcam (you can specify the camera index, 0 is usually the built-in webcam)
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture("./asdf.mp4")
 
 keyframe_interval = 1
 frame_count = 0
@@ -28,15 +31,16 @@ while True:
     # Capture a frame from the webcam
     ret, frame = cap.read()
 
-    if frame_count % keyframe_interval == 0:
+    if ret and frame_count % keyframe_interval == 0:
         h, w, c = frame.shape
         scale_factor_x = 640 / w
         scale_factor_y = 640 / h
 
         # Perform object detection using YOLO
-        results = model.predict(frame, save=False, imgsz=640, conf=0.5, device='cuda')[0]
+        with torch.no_grad():
+            results = model.predict(frame, save=False, imgsz=640, conf=0.5, device='cuda')[0]
 
-        print(results.keypoints)
+        # print(results.keypoints)
 
         # Extract bounding boxes and keypoints from YOLO results
         boxes = results.boxes.xyxy
