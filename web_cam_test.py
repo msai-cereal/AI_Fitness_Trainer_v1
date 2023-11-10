@@ -2,6 +2,7 @@ import cv2
 import torch
 import numpy as np
 from ultralytics import YOLO
+from condition_check import burpees, cross_lunge, barbell_squat, side_lateral_raise, push_up, pull_up
 
 pose_palette = np.array([[255, 128, 0], [255, 153, 51], [255, 178, 102], [230, 230, 0], [255, 153, 255],
                          [153, 204, 255], [255, 102, 255], [255, 51, 255], [102, 178, 255], [51, 153, 255],
@@ -17,7 +18,7 @@ kpt_color = pose_palette[[16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0,
                           9, 9, 9, 9, 9, 9, 7, 0, 0, 7, 7, 9, 9]]
 
 # Load YOLO model
-model = YOLO("./runs/pose/train5/weights/best.pt")
+model = YOLO("./runs/pose/train14/weights/best.pt")
 # model = YOLO("./runs/pose/train4/weights/best.pt")
 
 # Open the webcam (you can specify the camera index, 0 is usually the built-in webcam)
@@ -72,9 +73,9 @@ while True:
             frame = cv2.rectangle(frame, (x1_scale, y1_scale), (x2_scale, y2_scale), (0, 255, 0), 2)
             cv2.putText(frame, cls_name, (x1_scale, y1_scale), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-        for keypoint in kps:
+        for i, keypoint in enumerate(kps):
             x, y = int(keypoint[0] * scale_factor_x), int(keypoint[1] * scale_factor_y)
-            cv2.circle(frame, (x, y), 2, (0, 255, 255), 2)
+            cv2.circle(frame, (x, y), 2, kpt_color[i].tolist(), 2)
 
         for j, (s, t) in enumerate(skeleton):
             try:

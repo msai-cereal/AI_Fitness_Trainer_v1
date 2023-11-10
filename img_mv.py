@@ -8,7 +8,7 @@ os.makedirs(images_path, exist_ok=True)
 # images_path = "./ultralytics/cfg/fitness/valid/images"
 # os.makedirs(images_path, exist_ok=True)
 
-root_path = "C:/Users/labadmin/Downloads/fitness/train/images/71315_68"
+root_path = "C:/Users/labadmin/Downloads/fitness/train/images/1017"
 images_list = glob.glob(os.path.join(root_path, '*/*/*/*', "*.jpg"))
 # root_path = "C:/Users/labadmin/Downloads/fitness/valid/images"
 # images_list = glob.glob(os.path.join(root_path, '*/*/*/*', "*.jpg"))

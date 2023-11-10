@@ -1,10 +1,12 @@
 import os
 import glob
+import shutil
 import cv2
 import torch
 import random
 import numpy as np
-import albumentations as A
+from tqdm import tqdm
+# import albumentations as A
 from ultralytics import YOLO
 
 pose_palette = np.array([[255, 128, 0], [255, 153, 51], [255, 178, 102], [230, 230, 0], [255, 153, 255],
@@ -14,35 +16,45 @@ pose_palette = np.array([[255, 128, 0], [255, 153, 51], [255, 178, 102], [230, 2
 skeleton = [[22, 15], [15, 13], [13, 11], [23, 16], [16, 14], [14, 12],
             [21, 11], [21, 12], [21, 20], [20, 17],
             [17, 5], [17, 6], [5, 7], [6, 8], [7, 9], [8, 10], [9, 18], [10, 19],
-            [1, 2], [0, 1], [0, 2], [1, 3], [2, 4], [0, 17], [3, 5], [4, 6]]
+            [1, 2], [0, 1], [0, 2], [1, 3], [2, 4], [0, 17]]  # , [3, 5], [4, 6]
 limb_color = pose_palette[[9, 9, 9, 9, 9, 9, 7, 7, 7, 7,
-                           0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16]]
+                           0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16]]  # , 16, 16
 kpt_color = pose_palette[[16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0,
                           9, 9, 9, 9, 9, 9, 7, 0, 0, 7, 7, 9, 9]]
 
-model = YOLO("./runs/pose/train13/weights/best.pt")
+# model = YOLO("./runs/pose/train13/weights/best.pt")
+model = YOLO("./runs/pose/train14/weights/best.pt")
+# model = YOLO("./runs/pose/train15/weights/best.pt")
 
-root_path = "./ultralytics/cfg/fitness/valid/images"
+# root_path = "./ultralytics/cfg/fitness/valid/images"
 # image_path_list = glob.glob(os.path.join(root_path, '*jpg'))
+
+# root_path = "C:/Users/labadmin/Downloads/mpii_human_pose/images"
+# image_path_list = glob.glob(os.path.join(root_path, '*jpg'))
+# dst_path = "C:/Users/labadmin/Downloads/mpii_human_pose/images/de"
+# os.makedirs(dst_path, exist_ok=True)
 
 # root_path = "C:/Users/labadmin/Downloads/frame_ex/test0000_1078"
 # image_path_list = glob.glob(os.path.join(root_path, '*png'))
 # root_path = "C:/Users/labadmin/Downloads/frame_ex/img"
 # image_path_list += glob.glob(os.path.join(root_path, '*png'))
 
+root_path = "C:/Users/labadmin/Downloads/gathered_images"
+image_path_list = glob.glob(os.path.join(root_path, 'push*', '*png'))
+
 # root_path = "C:/Users/labadmin/Downloads/20231026"
 # image_path_list = glob.glob(os.path.join(root_path, "*", "*", "*.png"))
 
 # root_path = "C:/Users/labadmin/Downloads/crop"
-image_path_list = glob.glob(os.path.join(root_path, '*jpg'))
+# image_path_list = glob.glob(os.path.join(root_path, '*jpg'))
 
-random.shuffle(image_path_list)
+# random.shuffle(image_path_list)
 # print(image_path_list)
 # exit()
 
 # li = list(map(str, range(713, 729)))
 
-for image_path in image_path_list:
+for image_path in tqdm(image_path_list):
     # num = image_path.split("\\")[-1].split("-")[0]
     # if num not in li:
     #     continue
@@ -57,6 +69,14 @@ for image_path in image_path_list:
     kps = result.keypoints.xy[0].cpu().numpy()
     k_conf = result.keypoints.conf
     if k_conf is None:
+        image = cv2.imread(image_path)
+        image = cv2.resize(image, (640, 640))
+        cv2.imshow("Test", image)
+        k = cv2.waitKey(0)
+        if k == ord('q'):
+            break
+        # if k == ord('m'):
+        #     shutil.move(image_path, os.path.join(dst_path, image_path.split("\\")[-1]))
         continue
     # print(f"키 포인트 confidence: {k_conf}")
 
@@ -98,15 +118,16 @@ for image_path in image_path_list:
         except IndexError as e:
             print(image_path, j)
 
-    image = cv2.resize(image, (640, 640))
-    transform = A.Compose([A.augmentations.crops.transforms.CenterCrop(600, 360, always_apply=False, p=1.0)])
-    image = transform(image=image)['image']
+    # transform = A.Compose([A.augmentations.crops.transforms.CenterCrop(600, 360, always_apply=False, p=1.0)])
+    # image = transform(image=image)['image']
 
     # cv2.imwrite("./test.jpg", image)
     cv2.imshow("Test", image)
     k = cv2.waitKey(0)
     if k == ord('q'):
         break
+    # if k == ord('m'):
+    #     shutil.move(image_path, os.path.join(dst_path, image_path.split("\\")[-1]))
 
 
 # 이미지 한 장

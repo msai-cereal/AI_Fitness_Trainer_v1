@@ -803,8 +803,8 @@ class Albumentations:
                 A.RandomBrightnessContrast(p=0.0),
                 A.RandomGamma(p=0.0),
                 A.RandomShadow(p=0.8),
-                A.ImageCompression(quality_lower=75, p=0.0),
-                A.augmentations.crops.transforms.CenterCrop(640, 640, always_apply=False, p=1.0)]
+                A.ImageCompression(quality_lower=75, p=0.0)]
+                # A.augmentations.crops.transforms.CenterCrop(640, 640, always_apply=False, p=1.0)
                 # A.augmentations.geometric.resize.Resize(640, 640, interpolation=1, always_apply=False, p=1)
                 # A.augmentations.geometric.transforms.Perspective(scale=(0.07, 0.15), keep_size=True, pad_mode=0, pad_val=0, mask_pad_val=0, fit_output=False, interpolation=1, always_apply=False, p=0.7)
             self.transform = A.Compose(T, bbox_params=A.BboxParams(format='yolo', label_fields=['class_labels']))

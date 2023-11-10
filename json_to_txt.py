@@ -18,9 +18,11 @@ for mode in ('train', 'valid'):
     os.makedirs(labels_path, exist_ok=True)
 
     if mode == 'train':
-        li = ['138_12_1', '269_34_2', '71315_68']
+        # li = ['138_12_1', '269_34_2', '71315_68', '1017']
+        li = ['1017']
     else:
         li = [""]
+        continue
 
     for nums in li:
         root_path = f"C:/Users/labadmin/Downloads/fitness/{mode}/labels/{nums}"
@@ -86,6 +88,8 @@ for mode in ('train', 'valid'):
                     # 결과를 텍스트 파일로 저장
                     with open(labels_dst, 'w', encoding='utf-8') as f:
                         f.write(output_text)
+
+
 # txt 파일 제거
 # import os
 # from tqdm import tqdm
