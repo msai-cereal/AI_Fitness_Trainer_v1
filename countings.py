@@ -40,8 +40,7 @@ def cal_distance(A, B):
 
 
 # 시퀀스마다
-def count_burpees(data, flag):
-    pts = data[0]
+def count_burpees(pts, flag):
     Shoulder_L, Shoulder_R = pts[5], pts[6]
     Elbow_L, Elbow_R = pts[7], pts[8]
     Wrist_L, Wrist_R = pts[9], pts[10]
@@ -73,8 +72,7 @@ def count_burpees(data, flag):
 
 # 푸쉬업 (버피와 거의 같음)
 # 정면 / 측면 각도 달라져야 함
-def count_push_up(data, flag):
-    pts = data[0]
+def count_push_up(pts, flag):
     Shoulder_L, Shoulder_R = pts[5], pts[6]
     Elbow_L, Elbow_R = pts[7], pts[8]
     Wrist_L, Wrist_R = pts[9], pts[10]
@@ -106,9 +104,7 @@ def count_push_up(data, flag):
 
 
 # 사이드 레터럴 레이즈
-def count_side_lateral_raise(data, flag):
-    pts = data[0]
-
+def count_side_lateral_raise(pts, flag):
     Wrist_L, Wrist_R = pts[9], pts[10]
     Back, Waist = pts[20], pts[21]
 
@@ -121,8 +117,7 @@ def count_side_lateral_raise(data, flag):
 
 
 # 풀업
-def count_pull_up(data, flag):
-    pts = data[0]
+def count_pull_up(pts, flag):
     Nose = pts[0]
     Elbow_L, Elbow_R = pts[7], pts[8]
     Palm_L, Palm_R = pts[18], pts[19]
@@ -137,8 +132,7 @@ def count_pull_up(data, flag):
 
 
 # 크로스 런지
-def count_cross_lunge(data, flag):
-    pts = data[0]
+def count_cross_lunge(pts, flag):
     Hip_L, Hip_R = pts[11], pts[12]
     Knee_L, Knee_R = pts[13], pts[14]
 
@@ -161,8 +155,7 @@ def count_cross_lunge(data, flag):
 
 
 # 바벨 스쿼트
-def count_barbell_squat(data, flag):
-    pts = data[0]
+def count_barbell_squat(pts, flag):
     Hip_L, Hip_R = pts[11], pts[12]
     Knee_L, Knee_R = pts[13], pts[14]
     Ankle_L, Ankle_R = pts[15], pts[16]

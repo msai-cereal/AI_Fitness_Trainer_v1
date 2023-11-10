@@ -64,6 +64,7 @@ ep = '?????'
 messages = {""}
 counts = 0
 flag = False
+predicted_class = None
 
 while True:
     # Capture a frame from the webcam
@@ -161,8 +162,9 @@ while True:
             for i, m in enumerate(messages, 2):
                 cv2.putText(frame, m, (10, 30 * i), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
 
-        count, flag = count_fns[predicted_class]([[x / w, y / h] for x, y in kpts], flag)
-        counts += count
+        if predicted_class in range(6):
+            count, flag = count_fns[predicted_class]([[x / w, y / h] for x, y in kpts], flag)
+            counts += count
 
     cv2.putText(frame, ep + f" {counts}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
