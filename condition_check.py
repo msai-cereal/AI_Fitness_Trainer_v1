@@ -408,7 +408,7 @@ def cross_lunge(data):
                 error_message.add("Don't bend your upper body too much.")  # 상체를 너무 숙이지 마세요
 
             # 구부린 무릎의 최소 각의 크기 저장
-            if Knee_L[1] > Knee_R[1]:  # 왼발이 앞
+            if Knee_L[1] < Knee_R[1]:  # 왼발이 앞
                 Knee_mL = min(Knee_mL, cal_distance(Hip_L, Knee_L))
                 if not (Foot_L[0] - 0.04 < Knee_L[0] < Foot_L[0] + 0.04):
                     error_message.add("Make sure your knees and legs are straight.")  # 무릎과 다리가 일자가 되게 해주세요

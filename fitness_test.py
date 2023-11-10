@@ -22,9 +22,9 @@ limb_color = pose_palette[[9, 9, 9, 9, 9, 9, 7, 7, 7, 7,
 kpt_color = pose_palette[[16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0,
                           9, 9, 9, 9, 9, 9, 7, 0, 0, 7, 7, 9, 9]]
 
-# model = YOLO("./runs/pose/train13/weights/best.pt")
+# model = YOLO("./runs/pose/train18/weights/best.pt")
 model = YOLO("./runs/pose/train14/weights/best.pt")
-# model = YOLO("./runs/pose/train15/weights/best.pt")
+# model = YOLO("./runs/pose/train19/weights/best.pt")
 
 # root_path = "./ultralytics/cfg/fitness/valid/images"
 # image_path_list = glob.glob(os.path.join(root_path, '*jpg'))
@@ -69,12 +69,13 @@ for image_path in tqdm(image_path_list):
     kps = result.keypoints.xy[0].cpu().numpy()
     k_conf = result.keypoints.conf
     if k_conf is None:
-        image = cv2.imread(image_path)
-        image = cv2.resize(image, (640, 640))
-        cv2.imshow("Test", image)
-        k = cv2.waitKey(0)
-        if k == ord('q'):
-            break
+        # image = cv2.imread(image_path)
+        # image = cv2.resize(image, (640, 640))
+        # cv2.imshow("Test", image)
+        # k = cv2.waitKey(0)
+        # if k == ord('q'):
+        #     break
+
         # if k == ord('m'):
         #     shutil.move(image_path, os.path.join(dst_path, image_path.split("\\")[-1]))
         continue

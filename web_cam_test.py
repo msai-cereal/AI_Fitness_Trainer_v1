@@ -11,19 +11,32 @@ pose_palette = np.array([[255, 128, 0], [255, 153, 51], [255, 178, 102], [230, 2
 skeleton = [[22, 15], [15, 13], [13, 11], [23, 16], [16, 14], [14, 12],
             [21, 11], [21, 12], [21, 20], [20, 17],
             [17, 5], [17, 6], [5, 7], [6, 8], [7, 9], [8, 10], [9, 18], [10, 19],
-            [1, 2], [0, 1], [0, 2], [1, 3], [2, 4], [0, 17], [3, 5], [4, 6]]
+            [1, 2], [0, 1], [0, 2], [1, 3], [2, 4], [0, 17]]  # , [3, 5], [4, 6]
 limb_color = pose_palette[[9, 9, 9, 9, 9, 9, 7, 7, 7, 7,
-                           0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16]]
+                           0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16]]  # , 16, 16
 kpt_color = pose_palette[[16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0,
                           9, 9, 9, 9, 9, 9, 7, 0, 0, 7, 7, 9, 9]]
 
 # Load YOLO model
-model = YOLO("./runs/pose/train14/weights/best.pt")
-# model = YOLO("./runs/pose/train4/weights/best.pt")
+# model = YOLO("yolov8m-pose.pt")
+# model = YOLO("./runs/pose/train/weights/best1_10.pt")
+# model = YOLO("./runs/pose/train/weights/best(2)(1).pt")
+# model = YOLO("./runs/pose/train/weights/best2_4.pt")
+# model = YOLO("./runs/pose/train/weights/best12.pt")
+# model = YOLO("./runs/pose/train/weights/best13.pt")
+model = YOLO("./runs/pose/train/weights/best14.pt")
+# model = YOLO("./runs/pose/train/weights/best15.pt")
+
 
 # Open the webcam (you can specify the camera index, 0 is usually the built-in webcam)
-# cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)
 # cap = cv2.VideoCapture("./asdf.mp4")
+# cap = cv2.VideoCapture("./One-Minute Fitness Challenge Push-Ups.mp4")
+# cap = cv2.VideoCapture("./pull_half.mp4")
+# cap = cv2.VideoCapture("./pullupu.mp4")
+# cap = cv2.VideoCapture("./pushuup.mp4")
+# cap = cv2.VideoCapture("./pushup.mp4")
+
 
 keyframe_interval = 1
 frame_count = 0
@@ -49,7 +62,6 @@ while True:
         conf = results.boxes.conf
         cls_dict = results.names
         kps = results.keypoints.xy[0].cpu().numpy()
-        # k_conf = results.keypoints.conf
 
         # Resize the frame for visualization
         frame = cv2.resize(frame, (640, 640))
@@ -73,6 +85,13 @@ while True:
             frame = cv2.rectangle(frame, (x1_scale, y1_scale), (x2_scale, y2_scale), (0, 255, 0), 2)
             cv2.putText(frame, cls_name, (x1_scale, y1_scale), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
+        # if results.keypoints.conf is not None:
+        #     k_conf = results.keypoints.conf[0].cpu().numpy()
+        #     for keypoint, conf in zip(kps, k_conf):
+        #         x, y = int(keypoint[0] * scale_factor_x), int(keypoint[1] * scale_factor_y)
+        #         cv2.circle(frame, (x, y), 2, (0, 255, 255), 2)
+        #         cv2.putText(frame, str(conf)[:4], (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        # else:
         for i, keypoint in enumerate(kps):
             x, y = int(keypoint[0] * scale_factor_x), int(keypoint[1] * scale_factor_y)
             cv2.circle(frame, (x, y), 2, kpt_color[i].tolist(), 2)
@@ -86,6 +105,7 @@ while True:
                 continue
 
         # Display the frame with bounding boxes and keypoints
+        # frame = cv2.resize(frame, (768, 768))
         cv2.imshow("Webcam YOLO Keypoint Detection", frame)
 
     frame_count += 1
