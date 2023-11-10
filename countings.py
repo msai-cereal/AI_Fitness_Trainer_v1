@@ -122,10 +122,10 @@ def count_pull_up(pts, flag):
     Elbow_L, Elbow_R = pts[7], pts[8]
     Palm_L, Palm_R = pts[18], pts[19]
 
-    if abs(Nose[1] - Palm_L[1]) < 0.05 or abs(Nose[1] - Palm_R[1]) < 0.05 and flag:
+    if abs(Nose[1] - Palm_L[1]) < 0.002 or abs(Nose[1] - Palm_R[1]) < 0.002 and flag:
         return 1, False
 
-    if abs(Nose[1] - Elbow_L[1]) < 0.07 or abs(Nose[1] - Elbow_R[1]) < 0.07:
+    if abs(Nose[1] - Elbow_L[1]) < 0.002 or abs(Nose[1] - Elbow_R[1]) < 0.002:
         flag = True
 
     return 0, flag
