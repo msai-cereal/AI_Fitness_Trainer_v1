@@ -4,7 +4,7 @@ import numpy as np
 from ultralytics import YOLO
 from tensorflow.keras.models import load_model
 from condition_check import burpees, pull_up, cross_lunge, side_lateral_raise, barbell_squat, push_up
-from coutings import count_burpees, count_pull_up, count_cross_lunge, count_side_lateral_raise, count_barbell_squat, \
+from countings import count_burpees, count_pull_up, count_cross_lunge, count_side_lateral_raise, count_barbell_squat, \
     count_push_up
 
 check_fns = {0: burpees, 1: pull_up, 2: cross_lunge, 3: side_lateral_raise, 4: barbell_squat, 5: push_up}
@@ -36,6 +36,7 @@ class_to_emoji = {
 }
 
 model = YOLO("./runs/pose/train/weights/best14.pt")  # pt 경로
+# model = YOLO("./runs/pose/train/weights/best20.pt")  # pt 경로
 # lstm_model = load_model('./lstm_model_v43.h5')  # LSTM 모델의 파일 경로
 lstm_model = load_model('./lstm_model_v200.h5')  # LSTM 모델의 파일 경로
 
@@ -44,13 +45,12 @@ lstm_model = load_model('./lstm_model_v200.h5')  # LSTM 모델의 파일 경로
 
 cap = cv2.VideoCapture(0)
 # cap = cv2.VideoCapture("비디오 경로")
-# cap = cv2.VideoCapture("./crosslunge.mp4")
-# cap = cv2.VideoCapture("./Cross Lunge.mp4")
-# cap = cv2.VideoCapture("./One-Minute Fitness Challenge Push-Ups.mp4")
-# cap = cv2.VideoCapture("./pull_half.mp4")
-# cap = cv2.VideoCapture("./pullupu.mp4")
-# cap = cv2.VideoCapture("./pushuup.mp4")
-# cap = cv2.VideoCapture("./pushup.mp4")
+# cap = cv2.VideoCapture("./videos/바벨스쿼트.mp4")
+# cap = cv2.VideoCapture("./videos/버피.mp4")
+# cap = cv2.VideoCapture("./videos/사레레b.mp4")
+# cap = cv2.VideoCapture("./videos/크로스런지.mp4")
+# cap = cv2.VideoCapture("./videos/푸쉬업.mp4") # 20
+# cap = cv2.VideoCapture("./videos/풀업.mp4")   # x
 
 keyframe_interval = 1
 frame_count = 0
@@ -107,7 +107,7 @@ while True:
             except IndexError as e:
                 continue
 
-        if frame_count % 3 == 0:  # lstm_model_v200.h5 >> 3
+        if frame_count % 9 == 0:  # lstm_model_v200.h5: webcam>> 3, video >> 5
             # 각 키포인트를 정규화
             kpts_normalized = np.array([[x / w * 2 - 1, y / h * 2 - 1] for x, y in kpts])
             flip_kpts_normalized = np.array([[-x / w * 2 - 1, y / h * 2 - 1] for x, y in kpts])
@@ -140,6 +140,7 @@ while True:
             print(f"Predicted Class: {predicted_class} {emoji_to_display}")
             tmp = ep
             ep = exercise[predicted_class]
+            # ep = 'cross_lunge'
             if ep != tmp:
                 counts = 0
                 flag = False

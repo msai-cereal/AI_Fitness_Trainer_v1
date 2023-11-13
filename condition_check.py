@@ -4,15 +4,15 @@ from numpy.linalg import norm
 
 # 정규화된 키포인트
 pt = np.random.uniform
-data = np.array([[np.squeeze(np.array([[pt(0, 1), pt(0, 1)] for _ in range(24)])) for _ in range(9)]])
+data = np.array([[np.squeeze(np.array([[pt(0, 1), pt(0, 1)] for _ in range(24)])) for _ in range(16)]])
 data = data.tolist()
 
 
 # class_name = buppes, ...
-# data.shape = (1, 9, 24, 2)
+# data.shape = (1, 16, 24, 2)
 
 # LSTM에는 keypoint가 이런 모양으로 들어감
-# data = data.reshape((1, 9, 48))
+# data = data.reshape((1, 16, 48))
 # 모양에 따라서 아래 코드 수정 필요
 
 # cos 법칙으로 각 ABC를 °(도) 단위로 구하는 함수
@@ -89,7 +89,7 @@ def burpees(data):
                 # 팔을 폈으면 허리를 폈는지 확인(아래 둘 중 하나만? 둘 다?)
                 if Arm_L > 150 and Arm_R > 150:
                     # 목-등-허리 각도 확인
-                    if cal_angle(Neck, Back, Waist) < 170:
+                    if cal_angle(Neck, Back, Waist) < 160:
                         error_message.add("Relax your back.")  # 허리를 피세요
                     # # 등-힙 직선과 허리의 높이 비교
                     # dx = Back[0] - (Hip_L[0] + Hip_R[0]) / 2
@@ -175,7 +175,7 @@ def push_up(data):
                 # 팔을 폈으면 허리를 폈는지 확인(아래 둘 중 하나만? 둘 다?)
                 if Arm_L > 150 and Arm_R > 150:
                     # 목-등-허리 각도 확인
-                    if cal_angle(Neck, Back, Waist) < 150:
+                    if cal_angle(Neck, Back, Waist) < 160:
                         error_message.add("Relax your back.")
                     # # 등-힙 직선과 허리의 높이 비교
                     # dx = Back[0] - (Hip_L[0] + Hip_R[0]) / 2
@@ -190,10 +190,10 @@ def push_up(data):
 
                 # 팔을 구부렸으면, 충분히 구부렸는지 확인(아래 둘 중 하나만? 둘 다?)
                 # 어깨-팔꿈치-손목의 각도 확인
-                elif Arm_L < 95 or Arm_R < 95:
+                elif Arm_L < 120 or Arm_R < 120:
                     arm_angle = True
                 # 팔꿈치와 어깨의 y좌표 비교
-                elif abs(Shoulder_L[1] - Elbow_L[1]) < 0.05 or abs(Shoulder_R[1] - Elbow_R[1]) < 0.05:
+                elif abs(Shoulder_L[1] - Elbow_L[1]) < 0.012 or abs(Shoulder_R[1] - Elbow_R[1]) < 0.012:
                     arm_angle = True
 
                 if abs(Back[0] - (Palm_L[0] + Palm_R[0]) / 2) > 0.09:

@@ -58,10 +58,10 @@ def count_burpees(pts, flag):
 
         # 팔을 구부렸으면, 충분히 구부렸는지 확인(아래 둘 중 하나만? 둘 다?)
         # 어깨-팔꿈치-손목의 각도 확인
-        elif not flag and (Arm_L < 50 or Arm_R < 50):
+        elif not flag and (Arm_L < 130 or Arm_R < 130):
             flag = True
         # 팔꿈치와 어깨의 y좌표 비교
-        elif not flag and (abs(Shoulder_L[1] - Elbow_L[1]) < 0.02 or abs(Shoulder_R[1] - Elbow_R[1]) < 0.02):
+        elif not flag and (abs(Shoulder_L[1] - Elbow_L[1]) < 0.05 or abs(Shoulder_R[1] - Elbow_R[1]) < 0.05):
             flag = True
 
     elif flag:
@@ -83,21 +83,20 @@ def count_push_up(pts, flag):
     Arm_L = cal_angle(Shoulder_L, Elbow_L, Wrist_L)
     Arm_R = cal_angle(Shoulder_R, Elbow_R, Wrist_R)
 
-    if (Arm_L + Arm_R) > 240 and flag:
-        return 1, False
-
     # 엎드렸을 때(손이 무릎 밑으로 갔을 때)
     if Palm_L[1] > Knee_L[1] and Palm_R[1] > Knee_R[1]:
         # 팔을 폈으면 허리를 폈는지 확인(아래 둘 중 하나만? 둘 다?)
-        if Arm_L > 150 and Arm_R > 150:
-            pass
+        # if Arm_L > 150 and Arm_R > 150:
+        #     pass
+        if (Arm_L + Arm_R) > 300 and flag:
+            return 1, False
 
         # 팔을 구부렸으면, 충분히 구부렸는지 확인(아래 둘 중 하나만? 둘 다?)
         # 어깨-팔꿈치-손목의 각도 확인
-        elif Arm_L < 95 or Arm_R < 95:
+        elif not flag and Arm_L < 120 or Arm_R < 120:
             flag = True
         # 팔꿈치와 어깨의 y좌표 비교
-        elif abs(Shoulder_L[1] - Elbow_L[1]) < 0.05 or abs(Shoulder_R[1] - Elbow_R[1]) < 0.05:
+        elif not flag and abs(Shoulder_L[1] - Elbow_L[1]) < 0.012 or abs(Shoulder_R[1] - Elbow_R[1]) < 0.012:
             flag = True
 
     return 0, flag
@@ -120,12 +119,15 @@ def count_side_lateral_raise(pts, flag):
 def count_pull_up(pts, flag):
     Nose = pts[0]
     Elbow_L, Elbow_R = pts[7], pts[8]
-    Palm_L, Palm_R = pts[18], pts[19]
+    Wrist_L, Wrist_R = pts[9], pts[10]
+    # Palm_L, Palm_R = pts[18], pts[19]
 
-    if abs(Nose[1] - Palm_L[1]) < 0.002 or abs(Nose[1] - Palm_R[1]) < 0.002 and flag:
+    print(abs(Nose[1] - Wrist_L[1]), abs(Nose[1] - Elbow_L[1]))
+
+    if abs(Nose[1] - Wrist_L[1]) < 0.008 and abs(Nose[1] - Wrist_R[1]) < 0.008 and flag:
         return 1, False
 
-    if abs(Nose[1] - Elbow_L[1]) < 0.002 or abs(Nose[1] - Elbow_R[1]) < 0.002:
+    if abs(Nose[1] - Elbow_L[1]) < 0.01 and abs(Nose[1] - Elbow_R[1]) < 0.01:
         flag = True
 
     return 0, flag
@@ -133,7 +135,7 @@ def count_pull_up(pts, flag):
 
 # 크로스 런지
 def count_cross_lunge(pts, flag):
-    Hip_L, Hip_R = pts[11], pts[12]
+    Hip_L, Hip_R = pts[11], pts[11]
     Knee_L, Knee_R = pts[13], pts[14]
 
     # 구부린 무릎의 최소 각의 크기 저장
@@ -163,9 +165,9 @@ def count_barbell_squat(pts, flag):
     Knee_cL = cal_angle(Hip_L, Knee_L, Ankle_L)
     Knee_cR = cal_angle(Hip_R, Knee_R, Ankle_R)
 
-    if (Knee_cL > 160 or Knee_cR > 160) and flag:
+    if (Knee_cL > 170 or Knee_cR > 170) and flag:
         return 1, False
-    elif Knee_cL < 130 or Knee_cR < 130:
+    elif Knee_cL < 135 or Knee_cR < 135:
         flag = True
 
     return 0, flag
