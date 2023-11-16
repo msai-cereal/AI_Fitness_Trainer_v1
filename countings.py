@@ -76,7 +76,7 @@ def count_push_up(pts, flag):
     Shoulder_L, Shoulder_R = pts[5], pts[6]
     Elbow_L, Elbow_R = pts[7], pts[8]
     Wrist_L, Wrist_R = pts[9], pts[10]
-    Knee_L, Knee_R = pts[11], pts[12]
+    Knee_L, Knee_R = pts[13], pts[14]
     Palm_L, Palm_R = pts[18], pts[19]
 
     # 어깨-팔꿈치-손목 각도
