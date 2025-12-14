@@ -1,3 +1,4 @@
+
 # 🌱 MS AI School 3기 Team Cereal 
 
 ## 프로젝트 목표
